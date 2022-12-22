@@ -13,7 +13,8 @@ body {
 }
 
 h1, h2 {
-  font-family: 'Press Start 2P', monospace;
+  /* font-family: 'Press Start 2P', monospace; */
+  font-family: 'Roboto Mono', monospace;
   /* font-family: monospace; */
   color: rgb(237, 223, 186);
 }
@@ -24,13 +25,16 @@ canvas {
   background-color: rgb(221, 214, 214);
   width: 100%;
   height: 100;
+  border: 2px solid blue;
 }
 
 #container {
+margin: 1rem;
 max-width: 50em;
 /* height: 70vh; */
 background-color: rgb(195, 98, 117);
-margin: 0 auto;
+border: 2px solid blue;
+/* margin: 0 auto; */
 padding: 1em;
 display: grid;
 grid-gap: 1em;
@@ -45,7 +49,8 @@ grid-template-areas: "top-left top-left top-right"
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(168, 0, 0);
+  /* background-color: rgb(168, 0, 0); */
+  border: 2px solid blue;
 }
 
 #top-left {
@@ -60,6 +65,7 @@ grid-template-areas: "top-left top-left top-right"
 
 main {
   grid-area: game;
+  /* border: 2px solid blue; */
 }
 
 
