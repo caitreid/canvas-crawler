@@ -119,50 +119,53 @@ class Hero {
     }
 } 
 
+const getRandomCoordinates = (max) => {
+    return Math.floor(Math.random() * max)
+}
+
 const player = new Hero(10, 10, 16, 16, 'lightsteelblue')
 const ogre = new Ogre(200, 50, 32, 48, '#bada55')
+const ogre2 = new Ogre(getRandomCoordinates(game.width), getRandomCoordinates(game.height), 64, 96, 'red')
 
 // player.render()
 // ogre.render()
 
 
-
-
-const detectHit = () => {
+const detectHit = (thing) => {
 
     // console.log('detect hit')
 
-    if (player.x < ogre.x + ogre.width
-        && player.x + player.width > ogre.x
-        && player.y < ogre.y + ogre.height 
-        && player.y + player.height > ogre.y
+    if (player.x < thing.x + thing.width
+        && player.x + player.width > thing.x
+        && player.y < thing.y + thing.height 
+        && player.y + player.height > thing.y
         ) {
-            ogre.alive = false
-            statusEl.textContent = 'You Win!'
+            console.log('hitttt hay')
+            thing.alive = false
         }
 
 }
 
 const gameLoop = () => {
-    // no console.logs in here
-    // testing logs are ok, none in real thing
 
-    if (ogre.alive) {
-        detectHit()
-    }
-    
-    // to resemble movement, we should clear the old canvas every loop
-    // to avoid snake trails, we'll just see our player square moving around
     ctx.clearRect(0, 0, game.width, game.height)
-
 
     if (ogre.alive) {
         ogre.render()
+        detectHit(ogre)
+    } else if (ogre2.alive) {
+        statusEl.textContent = 'get her!!!'
+        ogre2.render()
+        detectHit(ogre2)
+    } else {
+        statusEl.textContent = 'you win!'
+        stopGameLoop()
+        
     }
 
     player.render()
     player.movePlayer()
-    movement.textContent = `${player.x}, ${player.y}`
+    movement.textContent = `Player position: ${player.x}, ${player.y}`
 } 
 
 document.addEventListener('keydown', (e) => {
@@ -178,8 +181,16 @@ document.addEventListener('keyup', (e) => {
     }
 })
 
+// set it as a variable
+// runs game loop every 60 milliseconds until we tell the game to stop
+const gameInterval = setInterval(gameLoop, 60)
+
+const stopGameLoop = () => {
+    clearInterval(gameInterval)
+}
+
 // add event listener
 document.addEventListener('DOMContentLoaded', function () {
     
-    setInterval(gameLoop, 60)
+    gameInterval
 })
