@@ -26,41 +26,9 @@ game.height = 360
 game.width = 720
 
 
-// console.log('game after setting width and height')
-// console.log(game)
 
-// const hero = {
-//     x:10,
-//     y:10,
-//     color: 'yellow',
-//     width: 20,
-//     height: 20,
-//     alive: true,
-//     render: function() {
-//         ctx.fillStyle = this.color
-//         ctx.fillRect(this.x, this.y, this.width, this.height)
-//     }
-// }
+class Ogre {
 
-// const ogre = {
-//     x: 200,
-//     y:100,
-//     color: "green",
-//     width: 60,
-//     height: 120,
-//     alive: true,
-//     render: function() {
-//         ctx.fillStyle = this.color
-//         ctx.fillRect(this.x, this.y, this.width, this.height)
-//     }
-// }
-
-// hero.render()
-// ogre.render()
-
-
-class Crawler {
-    // allows properties on the class to change object by object
     constructor(x, y, width, height, color) {
         this.x = x
         this.y = y
@@ -75,45 +43,104 @@ class Crawler {
     }
 } 
 
-const player = new Crawler(10, 10, 16, 16, 'lightsteelblue')
-const ogre = new Crawler(200, 50, 32, 48, '#bada55')
 
-player.render()
-ogre.render()
+class Hero {
+    constructor(x, y, width, height, color) {
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+        this.color = color
+        this.alive = true
+        // we need additioanl props on our hero class to make movement smoother
+        this.speed = 15
+        this.direction = {
+            up: false,
+            down: false,
+            left: false,
+            right: false
+        }
 
+        // set the direction - send our hero flying in that direction
+        this.setDirection = function (key) {
+            console.log('this is the key in setDirection', key)
+            if (key.toLowerCase() == 'w') { this.direction.up = true }
+            if (key.toLowerCase() == 'a') { this.direction.left = true }
+            if (key.toLowerCase() == 's') { this.direction.down = true }
+            if (key.toLowerCase() == 'd') { this.direction.right = true }
+        }
+        this.unsetDirection = function (key) {
+            console.log('this is the key in unsetDirection', key)
+            if (key.toLowerCase() == 'w') { this.direction.up = false }
+            if (key.toLowerCase() == 'a') { this.direction.left = false }
+            if (key.toLowerCase() == 's') { this.direction.down = false }
+            if (key.toLowerCase() == 'd') { this.direction.right = false }
+        }
+        // unsets a direction, which stops our hero from moving in that direction
 
-// how and when to move the player around
-const movementHandler = (e) => {
+        // new movement handler, so we'll get rid of the old one
+        // this will allow us to use the direction property on our hero object
+        this.movePlayer = function() {
+            // send our guy flying in whatever direction is true
+            if (this.direction.up) {
+                this.y -= this.speed
 
-    // e is standing for event
-    // basic key codes
-    // w = 87, a = 65, s = 83, d = 68
-    // up = 38, left = 37, down = 40, right = 39
-    console.log('keycode is: ', e.keyCode)
+                if (this.y <= 0) {
+                    this.y = 0
+                }
+            }
+            if (this.direction.left) {
+                this.x -= this.speed
 
-    switch (e.keyCode) {
-        case (38):
-        case (87): 
-            player.y -= 10
+                if (this.x <= 0) {
+                    this.x = 0
+                }
+            }
+            if (this.direction.down) {
+                this.y += this.speed
 
-            break
-        
-        case (37):
-        case (65): 
-            player.x -= 10
-            break
-        
-        case (40):
-        case (83): 
-            player.y += 10
-            break
-        
-        case (39):
-        case (68): 
-            player.x += 10
-            break
-        
+                if (this.y + this.height >= game.height) {
+                    this.y = game.height - this.height
+                }
+            }
+            if (this.direction.right) {
+                this.x += this.speed
+
+                if (this.x + this.width >= game.width) {
+                    this.x = game.width - this.width
+                }
+            }
+        }
+
+        this.render = function () {
+            ctx.fillStyle = this.color  
+            ctx.fillRect(this.x, this.y, this.width, this.height)
+        }
     }
+} 
+
+const player = new Hero(10, 10, 16, 16, 'lightsteelblue')
+const ogre = new Ogre(200, 50, 32, 48, '#bada55')
+
+// player.render()
+// ogre.render()
+
+
+
+
+const detectHit = () => {
+
+    // console.log('detect hit')
+
+    if (player.x < ogre.x + ogre.width
+        && player.x + player.width > ogre.x
+        && player.y < ogre.y + ogre.height 
+        && player.y + player.height > ogre.y
+        ) {
+            ogre.alive = false
+            statusEl.textContent = 'You Win!'
+        }
+
 }
 
 const gameLoop = () => {
@@ -128,42 +155,31 @@ const gameLoop = () => {
     // to avoid snake trails, we'll just see our player square moving around
     ctx.clearRect(0, 0, game.width, game.height)
 
-    player.render()
-    movement.textContent = `${player.x}, ${player.y}`
 
     if (ogre.alive) {
         ogre.render()
     }
+
+    player.render()
+    player.movePlayer()
+    movement.textContent = `${player.x}, ${player.y}`
 } 
 
+document.addEventListener('keydown', (e) => {
+    // set the appropriate direction when a key is pressed
+    player.setDirection(e.key)
 
-const detectHit = () => {
+})
 
-    // console.log('detect hit')
-
-    if (player.x < ogre.x + ogre.width
-        && player.x + player.width > ogre.x
-        && player.y < ogre.y + ogre.height 
-        && player.y + player.height > ogre.y
-        ) {
-            // console.log('hit!')
-            // console.log('player x -> ', player.x)
-            // console.log('player y ->', player.y)
-            // console.log('ogre x -> ', ogre.x)
-            // console.log('ogre.y -> ', ogre.y)
-            // statusEl.textContent = 'we have a hit!'
-
-            ogre.alive = false
-            statusEl.textContent = 'You Win!'
-        }
-
-}
+document.addEventListener('keyup', (e) => {
+    // key is released, call on set direction
+    if(['w', 'a', 's', 'd'].includes(e.key)) {
+        player.unsetDirection(e.key)
+    }
+})
 
 // add event listener
 document.addEventListener('DOMContentLoaded', function () {
     
-    document.addEventListener('keydown', movementHandler)
-
     setInterval(gameLoop, 60)
-
 })
