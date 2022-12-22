@@ -12,7 +12,7 @@
 
 const game = document.getElementById('canvas')
 const movement = document.getElementById('movement')
-const status = document.getElementById('status')
+const statusEl = document.getElementById('status')
 
 // we need to set the game's context to be 2D
 const ctx = game.getContext('2d')
@@ -23,10 +23,11 @@ const ctx = game.getContext('2d')
 game.setAttribute('width', getComputedStyle(game)['width'])
 game.setAttribute('height', getComputedStyle(game)['height'])
 game.height = 360
+game.width = 720
 
 
-console.log('game after setting width and height')
-console.log(game)
+// console.log('game after setting width and height')
+// console.log(game)
 
 // const hero = {
 //     x:10,
@@ -118,6 +119,10 @@ const movementHandler = (e) => {
 const gameLoop = () => {
     // no console.logs in here
     // testing logs are ok, none in real thing
+
+    if (ogre.alive) {
+        detectHit()
+    }
     
     // to resemble movement, we should clear the old canvas every loop
     // to avoid snake trails, we'll just see our player square moving around
@@ -131,12 +136,34 @@ const gameLoop = () => {
     }
 } 
 
+
+const detectHit = () => {
+
+    // console.log('detect hit')
+
+    if (player.x < ogre.x + ogre.width
+        && player.x + player.width > ogre.x
+        && player.y < ogre.y + ogre.height 
+        && player.y + player.height > ogre.y
+        ) {
+            // console.log('hit!')
+            // console.log('player x -> ', player.x)
+            // console.log('player y ->', player.y)
+            // console.log('ogre x -> ', ogre.x)
+            // console.log('ogre.y -> ', ogre.y)
+            // statusEl.textContent = 'we have a hit!'
+
+            ogre.alive = false
+            statusEl.textContent = 'You Win!'
+        }
+
+}
+
 // add event listener
 document.addEventListener('DOMContentLoaded', function () {
-    // game loop interval
-    setInterval(gameLoop, 60)
     
     document.addEventListener('keydown', movementHandler)
 
     setInterval(gameLoop, 60)
+
 })
