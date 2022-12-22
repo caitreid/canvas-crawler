@@ -6,7 +6,7 @@ html,body {
 body {
   padding-top: 1em;
   text-align: center;
-  background-color: black;
+  background-color: rgb(219, 141, 141);
   /* background-image: url('../img/dungeonhell.png'); */
   background-size: cover;
   background-repeat: space;
@@ -15,13 +15,13 @@ body {
 h1, h2 {
   font-family: 'Press Start 2P', monospace;
   /* font-family: monospace; */
-  color: goldenrod;
+  color: rgb(237, 223, 186);
 }
 
 canvas {
   /* background-image: url('../img/stone.png'); */
   /* background-repeat: repeat; */
-  background-color: #222;
+  background-color: rgb(221, 214, 214);
   width: 100%;
   height: 100;
 }
@@ -29,7 +29,7 @@ canvas {
 #container {
 max-width: 50em;
 /* height: 70vh; */
-background-color: rgb(111, 12, 32);
+background-color: rgb(195, 98, 117);
 margin: 0 auto;
 padding: 1em;
 display: grid;
@@ -45,7 +45,7 @@ grid-template-areas: "top-left top-left top-right"
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #222;
+  background-color: rgb(168, 0, 0);
 }
 
 #top-left {
