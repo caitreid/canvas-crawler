@@ -125,7 +125,7 @@ const getRandomCoordinates = (max) => {
 
 const player = new Hero(10, 10, 16, 16, 'lightsteelblue')
 const ogre = new Ogre(200, 50, 32, 48, '#bada55')
-const ogre2 = new Ogre(getRandomCoordinates(game.width), getRandomCoordinates(game.height), 64, 96, 'red')
+const ogre2 = new Ogre(getRandomCoordinates(game.width), getRandomCoordinates(game.height), 64, 96, 'pink')
 
 // player.render()
 // ogre.render()
